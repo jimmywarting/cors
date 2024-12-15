@@ -7,7 +7,7 @@ const get = follow.http.request
 const gets = follow.https.request
 
 function goFetch (req, res, options, responseOptions) {
-  const request = options.protocol === 'https:' ? gets : get
+  const request = options.p === 'https:' ? gets : get
 
   const proxyReq = request(options, (proxyRes) => {
     const responseHeaders = new Headers(proxyRes.headers)
@@ -83,7 +83,6 @@ const server = createServer((req, res) => {
     forwardRequestHeaders = true,
     forwardIpAddress = true,
     deleteRequestHeaders = [],
-    ignoreRequestHeaders = false,
     deleteResponseHeaders = [],
     setStatusCode = undefined,
     appendResponseHeaders = [],
@@ -114,12 +113,6 @@ const server = createServer((req, res) => {
       // Remove x-cors- prefix that are needed by forbidden request headers
       key = key.replace('x-cors-', '')
       requestHeaders.append(key, value)
-    }
-  }
-
-  if (ignoreRequestHeaders) {
-    for (let header of requestHeaders.keys()) {
-      requestHeaders.delete(header)
     }
   }
 
@@ -154,6 +147,7 @@ const server = createServer((req, res) => {
     host: targetUrl.host,
     followRedirects: followRedirect,
     path: targetUrl.pathname,
+    p: targetUrl.protocol,
   }
 
   const responseOptions = {
