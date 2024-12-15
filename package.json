@@ -1,0 +1,6 @@
+{
+  "type": "module",
+  "dependencies": {
+    "follow-redirects": "^1.15.9"
+  }
+}
