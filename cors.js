@@ -117,6 +117,12 @@ const server = createServer((req, res) => {
     }
   }
 
+  if (ignoreRequestHeaders) {
+    for (let header of requestHeaders.keys()) {
+      requestHeaders.delete(header)
+    }
+  }
+
   // 1.2 Forwards the client's IP address.
   if (forwardIpAddress) {
     requestHeaders.append('x-forwarded-for', req.socket.remoteAddress)
