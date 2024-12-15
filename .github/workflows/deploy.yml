@@ -34,7 +34,7 @@ jobs:
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "jimmywrting-cors-29"
+          project: "adv-cors"
           entrypoint: "cors.js"
           root: ""
           
