@@ -24,12 +24,12 @@ function goFetch (req, res, options, responseOptions) {
       responseHeaders.append(key, value)
     }
 
-    for (const value of responseOptions.setStatusCode) {
-      res.statusCode = value
+    if (responseOptions.setStatusCode) {
+      res.statusCode = responseOptions.setStatusCode
     }
 
-    for (const value of responseOptions.setStatusMessage) {
-      res.statusMessage = value
+    if (responseOptions.setStatusMessage) {
+      res.statusMessage = responseOptions.setStatusMessage
     }
 
     res.writeHead(
@@ -58,15 +58,21 @@ const server = createServer((req, res) => {
 
   if (clientsUrl.searchParams.has('cors')) {
     requestInfo = JSON.parse(clientsUrl.searchParams.get('cors'))
-  } else {
+  } else if (clientsHeaders.has('referer')) {
     let referer = clientsHeaders.get('referer')
     const cors = new URL(referer).searchParams.get('cors')
-    if (cors === null && referer) {
-      console.log('Referer:', referer)
+    if (cors === null) {
+      res.statusCode = 403
+      res.end('No CORS configuration found')
+      return
     }
     const config = JSON.parse(cors)
     const url = new URL(req.url, config.url) + ''
     requestInfo = { url }
+  } else {
+    res.statusCode = 403
+    res.end('No CORS configuration found')
+    return
   }
 
   const {
@@ -79,7 +85,11 @@ const server = createServer((req, res) => {
     deleteRequestHeaders = [],
     ignoreRequestHeaders = false,
     deleteResponseHeaders = [],
+    setStatusCode = undefined,
+    appendResponseHeaders = [],
+
     setRequestHeaders = [],
+    setResponseHeaders = [],
     appendRequestHeaders = [],
   } = requestInfo
 
@@ -141,7 +151,10 @@ const server = createServer((req, res) => {
   }
 
   const responseOptions = {
-    deleteResponseHeaders
+    deleteResponseHeaders,
+    appendResponseHeaders,
+    setResponseHeaders,
+    setStatusCode,
   }
 
   goFetch(requestBody, res, requestOptions, responseOptions)
