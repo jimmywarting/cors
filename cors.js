@@ -146,7 +146,7 @@ const server = createServer((req, res) => {
     headers: Object.fromEntries(requestHeaders),
     host: targetUrl.host,
     followRedirects: followRedirect,
-    path: targetUrl.pathname,
+    path: targetUrl.pathname + targetUrl.search,
     p: targetUrl.protocol,
   }
 
