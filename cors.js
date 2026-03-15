@@ -123,7 +123,7 @@ const server = createServer((req, res) => {
 
     // 1.2 Forwards the client's IP address.
     if (forwardIpAddress) {
-      // requestHeaders.append('x-forwarded-for', req.socket.remoteAddress)
+      requestHeaders.append('x-forwarded-for', req.socket.remoteAddress)
     }
 
     // 1.3 Delete unwanted request headers sent by the browser.
