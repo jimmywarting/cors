@@ -37,8 +37,8 @@ function goFetch (req, res, options, responseOptions) {
       res.setHeader(key, value)
     }
     
-    res.statusCode = responseOptions.setStatusCode || proxyRes.statusCode
-    res.statusMessage = responseOptions.setStatusMessage || proxyRes.statusMessage
+    res.statusCode = responseOptions.status ?? proxyRes.statusCode
+    res.statusMessage = responseOptions.statusMessage ?? proxyRes.statusMessage
 
     proxyRes.pipe(res, { end: true })
   })
@@ -83,12 +83,13 @@ const server = createServer((req, res) => {
       method = req.method,
       url,
       body,
+      status,
+      statusMessage,
       followRedirect = true,
       forwardRequestHeaders = true,
       forwardIpAddress = true,
       deleteRequestHeaders = [],
       deleteResponseHeaders = [],
-      setStatusCode = undefined,
       appendResponseHeaders = [],
 
       setRequestHeaders = [],
@@ -161,7 +162,8 @@ const server = createServer((req, res) => {
       deleteResponseHeaders,
       appendResponseHeaders,
       setResponseHeaders,
-      setStatusCode,
+      status,
+      statusMessage
     }
 
     goFetch(requestBody, res, requestOptions, responseOptions)
