@@ -31,19 +31,15 @@ function goFetch (req, res, options, responseOptions) {
       responseHeaders.append(key, value)
     }
 
-    if (responseOptions.setStatusCode) {
-      res.statusCode = responseOptions.setStatusCode
+    for (let [key, value] of responseHeaders) {
+      res.setHeader(key, value)
     }
 
-    if (responseOptions.setStatusMessage) {
-      res.statusMessage = responseOptions.setStatusMessage
-    }
+    res.setHeader('x-cors-headers', JSON.stringify([...proxyRes.headers]))
+    
+    res.statusCode = responseOptions.setStatusCode || proxyRes.statusCode
+    res.statusMessage = responseOptions.setStatusMessage || proxyRes.statusMessage
 
-    res.writeHead(
-      proxyRes.statusCode,
-      proxyReq.statusMessage,
-      Object.fromEntries(responseHeaders)
-    )
     proxyRes.pipe(res, { end: true })
   })
 
