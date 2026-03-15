@@ -18,7 +18,9 @@ function goFetch (req, res, options, responseOptions) {
 
   const proxyReq = request(options, (proxyRes) => {
     const responseHeaders = new Headers(proxyRes.headers)
-
+    
+    res.setHeader('x-adv-cors-original-response-headers', JSON.stringify([...responseHeaders]))
+    
     for (const key of responseOptions.deleteResponseHeaders) {
       responseHeaders.delete(key)
     }
@@ -34,8 +36,6 @@ function goFetch (req, res, options, responseOptions) {
     for (let [key, value] of responseHeaders) {
       res.setHeader(key, value)
     }
-
-    res.setHeader('x-cors-headers', JSON.stringify([...responseHeaders]))
     
     res.statusCode = responseOptions.setStatusCode || proxyRes.statusCode
     res.statusMessage = responseOptions.setStatusMessage || proxyRes.statusMessage
