@@ -35,7 +35,7 @@ function goFetch (req, res, options, responseOptions) {
       res.setHeader(key, value)
     }
 
-    res.setHeader('x-cors-headers', JSON.stringify([...proxyRes.headers]))
+    res.setHeader('x-cors-headers', JSON.stringify([...responseHeaders]))
     
     res.statusCode = responseOptions.setStatusCode || proxyRes.statusCode
     res.statusMessage = responseOptions.setStatusMessage || proxyRes.statusMessage
