@@ -104,7 +104,7 @@ const server = createServer((req, res) => {
     let requestHeaders = new Headers()
 
     res.setHeader('access-control-allow-origin', clientsHeaders.get('origin') || '*')
-    // res.setHeader('access-control-expose-headers', '*')
+    res.setHeader('access-control-expose-headers', '*')
 
     // Access-Control-Request-Private-Network: true
     for (let [key, value] of clientsHeaders) {
