@@ -62,7 +62,7 @@ createServer((req, res) => {
     
     if (req.method.toUpperCase() === 'OPTIONS') {
       res.setHeader('access-control-allow-origin', clientsHeaders.get('origin') || '*')
-      res.setHeader('access-control-allow-methods', 'GET, POST, PUT, DELETE, OPTIONS')
+      res.setHeader('access-control-allow-methods', clientsHeaders.get('access-control-request-method') || '*')
       res.setHeader('access-control-allow-headers', clientsHeaders.get('access-control-request-headers') || '*')
       res.setHeader('access-control-max-age', '86400')
       res.statusCode = 204
