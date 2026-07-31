@@ -3,6 +3,9 @@ import { createServer } from 'node:http'
 import { Buffer } from 'node:buffer'
 import http from 'node:http'
 import https from 'node:https'
+import { readFileSync } from 'node:fs'
+
+const util = readFileSync(new URL('./fetch.js', import.meta.url), 'utf-8')
 
 const get = http.request
 const gets = https.request
@@ -67,6 +70,12 @@ createServer((req, res) => {
       res.setHeader('access-control-max-age', '86400')
       res.statusCode = 204
       res.end()
+      return
+    }
+
+    if (req.method.toUpperCase() === 'GET' && clientsUrl.pathname === '/cors.js') {
+      res.setHeader('content-type', 'application/javascript')
+      res.end(util)
       return
     }
 
