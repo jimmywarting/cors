@@ -75,6 +75,8 @@ createServer((req, res) => {
 
     if (req.method.toUpperCase() === 'GET' && clientsUrl.pathname === '/cors.js') {
       res.setHeader('content-type', 'application/javascript')
+      res.setHeader('access-control-allow-origin', clientsHeaders.get('origin') || '*')
+      res.setHeader('access-control-allow-methods', clientsHeaders.get('access-control-request-method') || '*')
       res.end(util)
       return
     }
